@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:manage_student_credits_mobile/screens/screens.dart';
+import 'package:manage_student_credits_mobile/services/subject_service.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const AppState());
+}
+
+class AppState extends StatelessWidget {
+  const AppState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => SubjectService())],
+      child: const MainApp(),
+    );
+  }
 }
 
 class MainApp extends StatelessWidget {
