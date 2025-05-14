@@ -13,8 +13,8 @@ class SubjectResponse {
     required this.created,
   });
 
-  factory SubjectResponse.fromJson(String str) =>
-      SubjectResponse.fromMap(json.decode(str));
+  factory SubjectResponse.fromJson(String subject) =>
+      SubjectResponse.fromMap(json.decode(subject));
 
   String toJson() => json.encode(toMap());
 
