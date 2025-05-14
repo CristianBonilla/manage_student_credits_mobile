@@ -10,12 +10,17 @@ class CardContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 30),
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
-        width: double.infinity,
-        height: 200,
-        decoration: _createCardShape(),
-        child: Center(child: _container()),
+      child: InkWell(
+        onTap: () {
+          Navigator.pushReplacementNamed(context, info.route);
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 10),
+          width: double.infinity,
+          height: 200,
+          decoration: _createCardShape(),
+          child: Center(child: _container()),
+        ),
       ),
     );
   }
