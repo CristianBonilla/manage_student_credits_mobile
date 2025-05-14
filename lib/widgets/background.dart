@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
 class Background extends StatelessWidget {
-  const Background({super.key});
+  final Widget child;
+
+  const Background({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
-      child: Stack(children: [_PurpleBox()]),
+      child: Stack(children: [_PurpleBox(), child]),
     );
   }
 }
@@ -34,7 +36,7 @@ class _PurpleBox extends StatelessWidget {
     );
   }
 
-  BoxDecoration _purpleBackground() => BoxDecoration(
+  BoxDecoration _purpleBackground() => const BoxDecoration(
     gradient: LinearGradient(
       colors: [Color.fromRGBO(63, 63, 156, 1), Color.fromRGBO(90, 70, 178, 1)],
     ),

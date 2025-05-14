@@ -8,9 +8,17 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registro en línea', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Registro en línea',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      body: Background(),
+      body: Background(
+        child: ListView.builder(
+          itemCount: 2,
+          itemBuilder: (context, index) => Text('Hello'),
+        ),
+      ),
     );
   }
 }
