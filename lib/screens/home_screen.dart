@@ -6,6 +6,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Background());
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Registro en línea', style: TextStyle(color: Colors.white)),
+      ),
+      body: Background(),
+    );
   }
 }
