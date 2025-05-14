@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:manage_student_credits_mobile/constants/card_container_config.dart';
 import 'package:manage_student_credits_mobile/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,9 +15,14 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       body: Background(
-        child: ListView.builder(
-          itemCount: 2,
-          itemBuilder: (context, index) => Text('Hello'),
+        child: ListView.separated(
+          itemCount: cardContainerConfig.length,
+          itemBuilder:
+              (context, index) =>
+                  CardContainer(info: cardContainerConfig[index]),
+          separatorBuilder:
+              (context, index) =>
+                  const Divider(height: 30, color: Colors.transparent),
         ),
       ),
     );
