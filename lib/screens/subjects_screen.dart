@@ -9,8 +9,41 @@ class SubjectsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final subjectService = Provider.of<SubjectService>(context);
-    subjectService.getSubjects();
 
-    return ScreenContainer(title: 'Asignaturas');
+    return ScreenContainer(
+      title: 'Asignaturas',
+      child: FutureBuilder(
+        future: subjectService.getSubjects(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting &&
+              !snapshot.hasData) {
+            return Center(
+              child: Transform.scale(
+                scale: 1,
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasError) {
+            return Center(
+              child: Text(
+                snapshot.error?.toString() ??
+                    'A server error occurred, the subjects could not be obtained',
+              ),
+            );
+          }
+
+          return ListView.separated(
+            itemCount: snapshot.data!.length,
+            itemBuilder:
+                (context, index) => Text(snapshot.data![index].toJson()),
+            separatorBuilder:
+                (context, index) =>
+                    const Divider(height: 30, color: Colors.transparent),
+          );
+        },
+      ),
+    );
   }
 }

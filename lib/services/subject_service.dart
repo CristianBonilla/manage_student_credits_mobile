@@ -10,7 +10,8 @@ class SubjectService extends ChangeNotifier {
 
   Future<List<SubjectResponse>> getSubjects() async {
     final Uri url = Uri.http(AppUrl.baseUrl, AppUrl.subjectUrl);
-    final response = await http.get(url, headers: _headers);
+    late http.Response response;
+    await _load(() async => response = await http.get(url, headers: _headers));
     final List<dynamic> subjectsDecode = json.decode(response.body);
     List<SubjectResponse> subjects =
         subjectsDecode
@@ -18,5 +19,9 @@ class SubjectService extends ChangeNotifier {
             .toList();
 
     return subjects;
+  }
+
+  Future _load<T>(Future<T> Function() asyncFunc) async {
+    await Future.wait([asyncFunc(), Future.delayed(Duration(seconds: 3))]);
   }
 }
