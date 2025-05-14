@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 
 class SubjectService extends ChangeNotifier {
   final Map<String, String> _headers = {'Content-Type': 'application/json'};
-  final List<SubjectResponse> subjects = [];
 
   Future<List<SubjectResponse>> getSubjects() async {
     final Uri url = Uri.http(AppUrl.baseUrl, AppUrl.subjectUrl);

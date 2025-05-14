@@ -30,17 +30,15 @@ class SubjectsScreen extends StatelessWidget {
               child: Text(
                 snapshot.error?.toString() ??
                     'A server error occurred, the subjects could not be obtained',
+                style: TextStyle(color: Colors.red, fontSize: 20),
               ),
             );
           }
 
-          return ListView.separated(
+          return ListView.builder(
             itemCount: snapshot.data!.length,
             itemBuilder:
-                (context, index) => Text(snapshot.data![index].toJson()),
-            separatorBuilder:
-                (context, index) =>
-                    const Divider(height: 30, color: Colors.transparent),
+                (context, index) => SubjectCard(subject: snapshot.data![index]),
           );
         },
       ),
