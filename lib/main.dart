@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:manage_student_credits_mobile/screens/create_subject.dart';
 import 'package:manage_student_credits_mobile/screens/screens.dart';
 import 'package:manage_student_credits_mobile/services/student_service.dart';
 import 'package:manage_student_credits_mobile/services/subject_service.dart';

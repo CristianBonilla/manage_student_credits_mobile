@@ -47,7 +47,7 @@ class FormCard extends StatelessWidget {
   );
 
   MaterialButton _action() => MaterialButton(
-    onPressed: buttonOnPressed ?? () {},
+    onPressed: buttonOnPressed,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     disabledColor: Colors.grey,
     elevation: 0,

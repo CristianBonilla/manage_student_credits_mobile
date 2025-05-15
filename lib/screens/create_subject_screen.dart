@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manage_student_credits_mobile/providers/subject_form_provider.dart';
+import 'package:manage_student_credits_mobile/services/subject_service.dart';
 import 'package:manage_student_credits_mobile/ui/input_decorations.dart';
 import 'package:manage_student_credits_mobile/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -23,17 +24,46 @@ class CreateSubjectScreen extends StatelessWidget {
 class _SubjectForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final subjectService = Provider.of<SubjectService>(context);
     final subjectFormProvider = Provider.of<SubjectFormProvider>(context);
     final subjectRequest = subjectFormProvider.subjectRequest;
 
     return FormCard(
       formKey: subjectFormProvider.subjectFormKey,
-      buttonText: 'Guardar Asignatura',
-      buttonOnPressed: () {
-        if (subjectFormProvider.isValidForm()) {
-          Navigator.pushReplacementNamed(context, 'subjects');
-        }
-      },
+      buttonText:
+          subjectFormProvider.isLoading ? 'Cargando...' : 'Guardar Asignatura',
+      buttonOnPressed:
+          subjectFormProvider.isLoading
+              ? null
+              : () async {
+                FocusScope.of(context).unfocus();
+                if (subjectFormProvider.isValidForm()) {
+                  subjectFormProvider.isLoading = true;
+                  try {
+                    await subjectService.addSubject(subjectRequest);
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Se agregó una nueva asignatura'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                      Navigator.pushReplacementNamed(context, 'subjects');
+                    }
+                  } catch (error) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Ocurrió un error'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  } finally {
+                    subjectFormProvider.isLoading = false;
+                  }
+                }
+              },
       children: [
         TextFormField(
           autocorrect: false,
