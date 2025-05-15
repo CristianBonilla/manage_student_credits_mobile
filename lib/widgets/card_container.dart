@@ -12,7 +12,7 @@ class CardContainer extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 30),
       child: InkWell(
         onTap: () {
-          Navigator.pushReplacementNamed(context, info.route);
+          Navigator.pushNamed(context, info.route);
         },
         child: Container(
           margin: EdgeInsets.symmetric(vertical: 10),
