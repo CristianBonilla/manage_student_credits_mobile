@@ -41,7 +41,7 @@ class StudentService extends ChangeNotifier {
           response = await http.post(
             url,
             headers: api.headers,
-            body: studentRequest,
+            body: studentRequest.toJson(),
           ),
     );
     final dynamic studentDecode = json.decode(response.body);

@@ -42,7 +42,7 @@ class TeacherService extends ChangeNotifier {
           response = await http.post(
             url,
             headers: api.headers,
-            body: teacherRequest,
+            body: teacherRequest.toJson(),
           ),
     );
     final dynamic teacherDecode = json.decode(response.body);

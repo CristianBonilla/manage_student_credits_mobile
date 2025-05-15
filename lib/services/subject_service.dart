@@ -29,7 +29,7 @@ class SubjectService extends ChangeNotifier {
           response = await http.post(
             url,
             headers: api.headers,
-            body: subjectRequest,
+            body: subjectRequest.toJson(),
           ),
     );
     final dynamic subjectDecode = json.decode(response.body);
