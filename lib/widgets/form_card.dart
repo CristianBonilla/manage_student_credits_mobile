@@ -4,12 +4,14 @@ class FormCard extends StatelessWidget {
   final List<Widget> children;
   final String buttonText;
   final VoidCallback? buttonOnPressed;
+  final Key? formKey;
 
   const FormCard({
     super.key,
     this.children = const [],
     required this.buttonText,
     this.buttonOnPressed,
+    this.formKey,
   });
 
   @override
@@ -24,6 +26,7 @@ class FormCard extends StatelessWidget {
             width: double.infinity,
             decoration: _cardDecoration(),
             child: Form(
+              key: formKey,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [...children, SizedBox(height: 40), _action()],

@@ -24,12 +24,15 @@ class _SubjectForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final subjectFormProvider = Provider.of<SubjectFormProvider>(context);
+    final subjectRequest = subjectFormProvider.subjectRequest;
 
     return FormCard(
       formKey: subjectFormProvider.subjectFormKey,
       buttonText: 'Guardar Asignatura',
       buttonOnPressed: () {
-        print(subjectFormProvider.isValidForm());
+        if (subjectFormProvider.isValidForm()) {
+          Navigator.pushReplacementNamed(context, 'subjects');
+        }
       },
       children: [
         TextFormField(
@@ -40,6 +43,7 @@ class _SubjectForm extends StatelessWidget {
             labelText: 'Nombre de la asignatura',
             icon: Icons.subject,
           ),
+          onChanged: (name) => subjectRequest.name = name,
           validator: (name) {
             if (name == null || name.trim().isEmpty) {
               return 'El nombre es requerido';
@@ -73,6 +77,7 @@ class _SubjectForm extends StatelessWidget {
             labelText: 'Descripción de la asignatura',
             icon: Icons.description,
           ),
+          onChanged: (description) => subjectRequest.description = description,
           validator: (description) {
             final RegExp minExpr = RegExp(r'^.{5,}$');
             if (description != null &&
