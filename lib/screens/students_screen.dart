@@ -20,6 +20,7 @@ class StudentsScreen extends StatelessWidget {
       child: FutureBuilder(
         future: _getStudentResultDetails(
           studentService.getStudents(),
+          studentService.fetchTotalCreditsById,
           teacherService.fetchTeacherById,
         ),
         builder: (context, snapshot) {
@@ -55,6 +56,7 @@ class StudentsScreen extends StatelessWidget {
 
   Future<List<StudentResultDetail>> _getStudentResultDetails(
     Future<List<StudentResult>> asyncStudents,
+    Future<num> Function(String studentId) fetchTotalCreditsById,
     Future<TeacherResult> Function(String teacherId) fetchTeacherById,
   ) async {
     List<StudentResultDetail> students =
@@ -72,8 +74,15 @@ class StudentsScreen extends StatelessWidget {
 
                           return (studentDetail, teacher.teacher);
                         }).toList();
+                    final totalCredits = await fetchTotalCreditsById(
+                      student.student.studentId,
+                    );
 
-                    return StudentResultDetail(student.student, studentDetails);
+                    return StudentResultDetail(
+                      student.student,
+                      studentDetails,
+                      totalCredits,
+                    );
                   }),
             )
             .toList();

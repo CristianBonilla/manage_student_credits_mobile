@@ -43,6 +43,11 @@ class StudentCard extends StatelessWidget {
         ),
         TextDetail(title: 'Número de documento', text: info.documentNumber),
         TextDetail(title: 'Email', text: info.email),
+        TextDetail(
+          title: 'Total de créditos',
+          text: student.totalCredits.toString(),
+          size: 20,
+        ),
       ],
     );
   }

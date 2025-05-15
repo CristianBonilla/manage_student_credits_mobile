@@ -22,6 +22,17 @@ class StudentService extends ChangeNotifier {
     return students;
   }
 
+  Future<num> fetchTotalCreditsById(String studentId) async {
+    final Uri url = Uri.http(
+      api.ApiUrl.baseUrl,
+      '${api.ApiUrl.studentUrl}/$studentId/total-credits',
+    );
+    final http.Response response = await http.get(url, headers: api.headers);
+    num totalCredits = num.parse(response.body);
+
+    return totalCredits;
+  }
+
   Future<StudentResponse> addStudent(StudentRequest studentRequest) async {
     final Uri url = Uri.http(api.ApiUrl.baseUrl, api.ApiUrl.studentUrl);
     late http.Response response;
