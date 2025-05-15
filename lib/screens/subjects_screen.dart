@@ -12,6 +12,9 @@ class SubjectsScreen extends StatelessWidget {
 
     return ScreenContainer(
       title: 'Asignaturas',
+      floatingActionOnPressed: () {
+        Navigator.pushReplacementNamed(context, 'create-subject');
+      },
       child: FutureBuilder(
         future: subjectService.getSubjects(),
         builder: (context, snapshot) {
