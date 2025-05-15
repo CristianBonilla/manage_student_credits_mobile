@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:manage_student_credits_mobile/constants/api.dart' as api;
+import 'package:manage_student_credits_mobile/models/subject/subject_request.dart';
 import 'package:manage_student_credits_mobile/models/subject/subject_response.dart';
 import 'package:http/http.dart' as http;
 
@@ -18,6 +19,23 @@ class SubjectService extends ChangeNotifier {
             .toList();
 
     return subjects;
+  }
+
+  Future<SubjectResponse> addSubject(SubjectRequest subjectRequest) async {
+    final Uri url = Uri.http(api.ApiUrl.baseUrl, api.ApiUrl.subjectUrl);
+    late http.Response response;
+    await _load(
+      () async =>
+          response = await http.post(
+            url,
+            headers: api.headers,
+            body: subjectRequest,
+          ),
+    );
+    final dynamic subjectDecode = json.decode(response.body);
+    SubjectResponse subject = SubjectResponse.fromMap(subjectDecode);
+
+    return subject;
   }
 
   Future _load<T>(Future<T> Function() asyncFunc) async {

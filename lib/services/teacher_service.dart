@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:manage_student_credits_mobile/constants/api.dart' as api;
+import 'package:manage_student_credits_mobile/models/teacher/teacher_request.dart';
+import 'package:manage_student_credits_mobile/models/teacher/teacher_response.dart';
 import 'package:manage_student_credits_mobile/models/teacher/teacher_result.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,6 +30,23 @@ class TeacherService extends ChangeNotifier {
     final http.Response response = await http.get(url, headers: api.headers);
     final dynamic teacherDecode = json.decode(response.body);
     final TeacherResult teacher = TeacherResult.fromMap(teacherDecode);
+
+    return teacher;
+  }
+
+  Future<TeacherResponse> addTeacher(TeacherRequest teacherRequest) async {
+    final Uri url = Uri.http(api.ApiUrl.baseUrl, api.ApiUrl.teacherUrl);
+    late http.Response response;
+    await _load(
+      () async =>
+          response = await http.post(
+            url,
+            headers: api.headers,
+            body: teacherRequest,
+          ),
+    );
+    final dynamic teacherDecode = json.decode(response.body);
+    TeacherResponse teacher = TeacherResponse.fromMap(teacherDecode);
 
     return teacher;
   }
