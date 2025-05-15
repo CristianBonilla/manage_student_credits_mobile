@@ -4,7 +4,7 @@ import 'package:manage_student_credits_mobile/models/subject/subject_response.da
 class TeacherDetailResponse {
   final String teacherId;
   final SubjectResponse subject;
-  final int credits;
+  final num credits;
   final DateTime created;
 
   TeacherDetailResponse({

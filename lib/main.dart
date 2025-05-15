@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:manage_student_credits_mobile/screens/screens.dart';
 import 'package:manage_student_credits_mobile/services/subject_service.dart';
+import 'package:manage_student_credits_mobile/services/teacher_service.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -13,7 +14,10 @@ class AppState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => SubjectService())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => TeacherService()),
+        ChangeNotifierProvider(create: (_) => SubjectService()),
+      ],
       child: const MainApp(),
     );
   }
