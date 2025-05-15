@@ -24,6 +24,7 @@ class FormCard extends StatelessWidget {
             width: double.infinity,
             decoration: _cardDecoration(),
             child: Form(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [...children, SizedBox(height: 40), _action()],
               ),
@@ -43,7 +44,7 @@ class FormCard extends StatelessWidget {
   );
 
   MaterialButton _action() => MaterialButton(
-    onPressed: buttonOnPressed,
+    onPressed: buttonOnPressed ?? () {},
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
     disabledColor: Colors.grey,
     elevation: 0,
