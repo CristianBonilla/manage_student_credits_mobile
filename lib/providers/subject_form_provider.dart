@@ -5,6 +5,13 @@ class SubjectFormProvider extends ChangeNotifier {
   final GlobalKey<FormState> subjectFormKey = GlobalKey();
   final SubjectRequest subjectRequest = SubjectRequest();
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  set isLoading(bool isLoading) {
+    _isLoading = isLoading;
+    notifyListeners();
+  }
+
   bool isValidForm() {
     return subjectFormKey.currentState?.validate() ?? false;
   }
