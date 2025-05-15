@@ -14,10 +14,22 @@ class TeacherService extends ChangeNotifier {
     final List<dynamic> teachersDecode = json.decode(response.body);
     List<TeacherResult> teachers =
         teachersDecode
-            .map((subject) => TeacherResult.fromMap(subject))
+            .map((teacher) => TeacherResult.fromMap(teacher))
             .toList();
 
     return teachers;
+  }
+
+  Future<TeacherResult> fetchTeacherById(String teacherId) async {
+    final Uri url = Uri.http(
+      api.ApiUrl.baseUrl,
+      '${api.ApiUrl.teacherUrl}/$teacherId',
+    );
+    final http.Response response = await http.get(url, headers: api.headers);
+    final dynamic teacherDecode = json.decode(response.body);
+    final TeacherResult teacher = TeacherResult.fromMap(teacherDecode);
+
+    return teacher;
   }
 
   Future _load<T>(Future<T> Function() asyncFunc) async {
