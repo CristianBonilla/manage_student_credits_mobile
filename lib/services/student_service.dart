@@ -35,6 +35,17 @@ class StudentService extends ChangeNotifier {
     return totalCredits;
   }
 
+  Future<bool> canAddSubjects(String studentId) async {
+    final Uri url = Uri.http(
+      api.ApiUrl.baseUrl,
+      '${api.ApiUrl.studentUrl}/$studentId/can-add-subjects',
+    );
+    final http.Response response = await http.get(url, headers: api.headers);
+    bool canAddSubjects = bool.parse(response.body);
+
+    return canAddSubjects;
+  }
+
   Future<StudentResponse> addStudent(StudentRequest studentRequest) async {
     final Uri url = Uri.http(api.ApiUrl.baseUrl, api.ApiUrl.studentUrl);
     late http.Response response;

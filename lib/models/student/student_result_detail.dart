@@ -5,11 +5,13 @@ import 'package:manage_student_credits_mobile/models/teacher/teacher_response.da
 class StudentResultDetail {
   final StudentResponse student;
   final List<(StudentDetailResponse, TeacherResponse)> studentDetails;
+  final bool canAddSubjects;
   final num totalCredits;
 
-  const StudentResultDetail(
-    this.student,
-    this.studentDetails, [
+  StudentResultDetail({
+    required this.student,
+    required this.studentDetails,
+    required this.canAddSubjects,
     this.totalCredits = 0,
-  ]);
+  });
 }

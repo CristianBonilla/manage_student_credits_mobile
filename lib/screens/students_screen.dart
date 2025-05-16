@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:manage_student_credits_mobile/models/student/student_result.dart';
 import 'package:manage_student_credits_mobile/models/student/student_result_detail.dart';
-import 'package:manage_student_credits_mobile/models/teacher/teacher_result.dart';
 import 'package:manage_student_credits_mobile/services/student_service.dart';
 import 'package:manage_student_credits_mobile/services/teacher_service.dart';
 import 'package:manage_student_credits_mobile/widgets/widgets.dart';
@@ -21,11 +19,7 @@ class StudentsScreen extends StatelessWidget {
         Navigator.pushNamed(context, 'create-student');
       },
       child: FutureBuilder(
-        future: _getStudentResultDetails(
-          studentService.getStudents(),
-          studentService.fetchTotalCreditsById,
-          teacherService.fetchTeacherById,
-        ),
+        future: _getStudentResultDetails(studentService, teacherService),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting &&
               !snapshot.hasData) {
@@ -61,12 +55,11 @@ class StudentsScreen extends StatelessWidget {
   }
 
   Future<List<StudentResultDetail>> _getStudentResultDetails(
-    Future<List<StudentResult>> asyncStudents,
-    Future<num> Function(String studentId) fetchTotalCreditsById,
-    Future<TeacherResult> Function(String teacherId) fetchTeacherById,
+    StudentService studentService,
+    TeacherService teacherService,
   ) async {
     List<StudentResultDetail> students =
-        await Stream.fromFuture(asyncStudents)
+        await Stream.fromFuture(studentService.getStudents())
             .asyncExpand(
               (students) =>
                   Stream.fromIterable(students).asyncMap((student) async {
@@ -74,20 +67,23 @@ class StudentsScreen extends StatelessWidget {
                         await Stream.fromIterable(
                           student.studentDetails,
                         ).asyncMap((studentDetail) async {
-                          final teacher = await fetchTeacherById(
+                          final teacher = await teacherService.fetchTeacherById(
                             studentDetail.teacherDetail.teacherId,
                           );
 
                           return (studentDetail, teacher.teacher);
                         }).toList();
-                    final totalCredits = await fetchTotalCreditsById(
+                    final totalCredits = await studentService
+                        .fetchTotalCreditsById(student.student.studentId);
+                    final canAddSubjects = await studentService.canAddSubjects(
                       student.student.studentId,
                     );
 
                     return StudentResultDetail(
-                      student.student,
-                      studentDetails,
-                      totalCredits,
+                      student: student.student,
+                      studentDetails: studentDetails,
+                      totalCredits: totalCredits,
+                      canAddSubjects: canAddSubjects,
                     );
                   }),
             )
