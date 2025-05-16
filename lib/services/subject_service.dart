@@ -5,6 +5,7 @@ import 'package:manage_student_credits_mobile/models/service_error.dart';
 import 'package:manage_student_credits_mobile/models/subject/subject_request.dart';
 import 'package:manage_student_credits_mobile/models/subject/subject_response.dart';
 import 'package:http/http.dart' as http;
+import 'package:manage_student_credits_mobile/models/teacher/teacher_response.dart';
 
 class SubjectService extends ChangeNotifier {
   Future<List<SubjectResponse>> getSubjects() async {
@@ -41,6 +42,23 @@ class SubjectService extends ChangeNotifier {
     } else {
       throw ServiceErrorException(ServiceError.fromMap(responseDecode));
     }
+  }
+
+  Future<List<TeacherResponse>> fetchTeachersBySubjectId(
+    String subjectId,
+  ) async {
+    final Uri url = Uri.http(
+      api.ApiUrl.baseUrl,
+      '${api.ApiUrl.subjectUrl}/$subjectId/teachers',
+    );
+    final http.Response response = await http.get(url, headers: api.headers);
+    final List<dynamic> teachersDecode = json.decode(response.body);
+    List<TeacherResponse> teachers =
+        teachersDecode
+            .map((teacher) => TeacherResponse.fromMap(teacher))
+            .toList();
+
+    return teachers;
   }
 
   Future _load<T>(Future<T> Function() asyncFunc) async {

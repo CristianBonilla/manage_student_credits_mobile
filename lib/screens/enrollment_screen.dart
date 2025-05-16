@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:manage_student_credits_mobile/models/service_error.dart';
 import 'package:manage_student_credits_mobile/models/student/student_response.dart';
 import 'package:manage_student_credits_mobile/models/subject/subject_response.dart';
-import 'package:manage_student_credits_mobile/models/teacher/teacher_result.dart';
+import 'package:manage_student_credits_mobile/models/teacher/teacher_response.dart';
 import 'package:manage_student_credits_mobile/services/student_service.dart';
 import 'package:manage_student_credits_mobile/services/subject_service.dart';
-import 'package:manage_student_credits_mobile/services/teacher_service.dart';
 import 'package:manage_student_credits_mobile/ui/field_decorations.dart';
 import 'package:manage_student_credits_mobile/widgets/widgets.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +26,6 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
   @override
   Widget build(BuildContext context) {
     final subjectService = Provider.of<SubjectService>(context);
-    final teacherService = Provider.of<TeacherService>(context);
     final studentService = Provider.of<StudentService>(context);
 
     return ScreenContainer(
@@ -50,7 +48,7 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
           SizedBox(height: 20),
           _subjectIdSelected == null
               ? SizedBox()
-              : _teacherDropdownList(teacherService),
+              : _teacherDropdownList(subjectService),
         ],
       ),
     );
@@ -82,35 +80,38 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
           );
         }
 
-        return DropdownButtonFormField(
-          decoration: FieldDecorations.inputFormDecoration(
-            labelText: 'Seleccionar asignatura',
-          ),
-          value: _subjectIdSelected,
-          items:
-              snapshot.requireData
-                  .map(
-                    (subject) => DropdownMenuItem(
-                      value: subject.subjectId,
-                      child: Text(subject.name),
-                    ),
-                  )
-                  .toList(),
-          onChanged: (subjectId) {
-            setState(() {
-              _subjectIdSelected = subjectId;
-            });
-          },
-        );
+        return snapshot.requireData.isEmpty
+            ? SizedBox()
+            : DropdownButtonFormField(
+              decoration: FieldDecorations.inputFormDecoration(
+                labelText: 'Seleccionar asignatura',
+              ),
+              value: _subjectIdSelected,
+              items:
+                  snapshot.requireData
+                      .map(
+                        (subject) => DropdownMenuItem(
+                          value: subject.subjectId,
+                          child: Text(subject.name),
+                        ),
+                      )
+                      .toList(),
+              onChanged: (subjectId) {
+                setState(() {
+                  _subjectIdSelected = subjectId;
+                  _teacherIdSelected = null;
+                });
+              },
+            );
       },
     );
   }
 
-  FutureBuilder<List<TeacherResult>> _teacherDropdownList(
-    TeacherService teacherService,
+  FutureBuilder<List<TeacherResponse>> _teacherDropdownList(
+    SubjectService subjectService,
   ) {
     return FutureBuilder(
-      future: _getTeachers(teacherService),
+      future: _getTeachers(subjectService),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting &&
             !snapshot.hasData) {
@@ -132,28 +133,30 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
           );
         }
 
-        return DropdownButtonFormField(
-          decoration: FieldDecorations.inputFormDecoration(
-            labelText: 'Seleccionar profesor',
-          ),
-          value: _teacherIdSelected,
-          items:
-              snapshot.requireData
-                  .map(
-                    (teacher) => DropdownMenuItem(
-                      value: teacher.teacher.teacherId,
-                      child: Text(
-                        '${teacher.teacher.firstname} ${teacher.teacher.lastname}',
-                      ),
-                    ),
-                  )
-                  .toList(),
-          onChanged: (teacherId) {
-            setState(() {
-              _teacherIdSelected = teacherId;
-            });
-          },
-        );
+        return snapshot.requireData.isEmpty
+            ? SizedBox()
+            : DropdownButtonFormField(
+              decoration: FieldDecorations.inputFormDecoration(
+                labelText: 'Seleccionar profesor',
+              ),
+              value: _teacherIdSelected,
+              items:
+                  snapshot.requireData
+                      .map(
+                        (teacher) => DropdownMenuItem(
+                          value: teacher.teacherId,
+                          child: Text(
+                            '${teacher.firstname} ${teacher.lastname}',
+                          ),
+                        ),
+                      )
+                      .toList(),
+              onChanged: (teacherId) {
+                setState(() {
+                  _teacherIdSelected = teacherId;
+                });
+              },
+            );
       },
     );
   }
@@ -172,13 +175,21 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
     return subjects;
   }
 
-  Future<List<TeacherResult>> _getTeachers(
-    TeacherService teacherService,
+  Future<List<TeacherResponse>> _getTeachers(
+    SubjectService subjectService,
   ) async {
-    final teachers = await teacherService.getTeachers();
+    final teachers = await subjectService.fetchTeachersBySubjectId(
+      _subjectIdSelected!,
+    );
+    if (teachers.isEmpty) {
+      setState(() {
+        _teacherIdSelected = null;
+      });
+      _enableButton();
+    }
     if (teachers.isNotEmpty && _teacherIdSelected == null) {
       setState(() {
-        _teacherIdSelected = teachers[0].teacher.teacherId;
+        _teacherIdSelected = teachers[0].teacherId;
       });
       _enableButton();
     }
