@@ -35,35 +35,7 @@ class _SubjectForm extends StatelessWidget {
       buttonOnPressed:
           subjectFormProvider.isLoading
               ? null
-              : () async {
-                FocusScope.of(context).unfocus();
-                if (subjectFormProvider.isValidForm()) {
-                  subjectFormProvider.isLoading = true;
-                  try {
-                    await subjectService.addSubject(subjectRequest);
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Se agregó una nueva asignatura'),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                      Navigator.pushReplacementNamed(context, 'subjects');
-                    }
-                  } catch (error) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Ocurrió un error'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  } finally {
-                    subjectFormProvider.isLoading = false;
-                  }
-                }
-              },
+              : _addSubject(context, subjectService, subjectFormProvider),
       children: [
         TextFormField(
           autocorrect: false,
@@ -79,6 +51,11 @@ class _SubjectForm extends StatelessWidget {
               return 'El nombre es requerido';
             }
 
+            final RegExp patternExpr = RegExp(r'^[a-zA-Z0-9 ]+$');
+            if (!patternExpr.hasMatch(name.trim())) {
+              return 'El nombre solo debe tener letras, números y espacios';
+            }
+
             final RegExp minExpr = RegExp(r'^.{3,}$');
             if (!minExpr.hasMatch(name.trim())) {
               return 'El nombre debe tener mínimo 3 carácteres';
@@ -87,11 +64,6 @@ class _SubjectForm extends StatelessWidget {
             final RegExp maxExpr = RegExp(r'^.{1,30}$');
             if (!maxExpr.hasMatch(name.trim())) {
               return 'El nombre debe tener máximo 30 carácteres';
-            }
-
-            final RegExp patternExpr = RegExp(r'^[a-zA-Z0-9 ]+$');
-            if (!patternExpr.hasMatch(name.trim())) {
-              return 'El nombre solo debe tener letras, números y espacios';
             }
 
             return null;
@@ -121,5 +93,41 @@ class _SubjectForm extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void Function() _addSubject(
+    BuildContext context,
+    SubjectService subjectService,
+    SubjectFormProvider subjectFormProvider,
+  ) {
+    return () async {
+      FocusScope.of(context).unfocus();
+      if (subjectFormProvider.isValidForm()) {
+        subjectFormProvider.isLoading = true;
+        try {
+          await subjectService.addSubject(subjectFormProvider.subjectRequest);
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Se agregó una nueva asignatura'),
+                backgroundColor: Colors.green,
+              ),
+            );
+            Navigator.pushReplacementNamed(context, 'subjects');
+          }
+        } catch (error) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Ocurrió un error. No se agregó la asignatura'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        } finally {
+          subjectFormProvider.isLoading = false;
+        }
+      }
+    };
   }
 }
