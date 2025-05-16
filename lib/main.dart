@@ -37,6 +37,7 @@ class MainApp extends StatelessWidget {
       routes: {
         'home': (_) => const HomeScreen(),
         'teachers': (_) => const TeachersScreen(),
+        'create-teacher': (_) => const CreateTeacherScreen(),
         'students': (_) => const StudentsScreen(),
         'subjects': (_) => const SubjectsScreen(),
         'create-subject': (_) => const CreateSubjectScreen(),

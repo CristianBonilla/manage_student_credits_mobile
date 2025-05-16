@@ -12,6 +12,9 @@ class TeachersScreen extends StatelessWidget {
 
     return ScreenContainer(
       title: 'Profesores',
+      floatingActionOnPressed: () {
+        Navigator.pushNamed(context, 'create-teacher');
+      },
       child: FutureBuilder(
         future: teacherService.getTeachers(),
         builder: (context, snapshot) {
