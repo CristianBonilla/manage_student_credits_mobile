@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:manage_student_credits_mobile/screens/create_student_screen.dart';
 import 'package:manage_student_credits_mobile/screens/screens.dart';
 import 'package:manage_student_credits_mobile/services/student_service.dart';
 import 'package:manage_student_credits_mobile/services/subject_service.dart';
@@ -39,6 +40,7 @@ class MainApp extends StatelessWidget {
         'teachers': (_) => const TeachersScreen(),
         'create-teacher': (_) => const CreateTeacherScreen(),
         'students': (_) => const StudentsScreen(),
+        'create-student': (_) => const CreateStudentScreen(),
         'subjects': (_) => const SubjectsScreen(),
         'create-subject': (_) => const CreateSubjectScreen(),
       },

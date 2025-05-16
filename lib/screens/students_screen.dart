@@ -17,6 +17,9 @@ class StudentsScreen extends StatelessWidget {
 
     return ScreenContainer(
       title: 'Estudiantes',
+      floatingActionOnPressed: () {
+        Navigator.pushNamed(context, 'create-student');
+      },
       child: FutureBuilder(
         future: _getStudentResultDetails(
           studentService.getStudents(),
