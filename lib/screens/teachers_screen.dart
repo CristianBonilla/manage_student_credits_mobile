@@ -26,11 +26,14 @@ class TeachersScreen extends StatelessWidget {
           }
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasError) {
-            return Center(
-              child: Text(
-                snapshot.error?.toString() ??
-                    'A server error occurred, the teachers could not be obtained',
-                style: TextStyle(color: Colors.red, fontSize: 20),
+            return Padding(
+              padding: EdgeInsets.all(20),
+              child: Center(
+                child: Text(
+                  snapshot.error?.toString() ??
+                      'A server error occurred, the teachers could not be obtained',
+                  style: TextStyle(color: Colors.red, fontSize: 20),
+                ),
               ),
             );
           }
