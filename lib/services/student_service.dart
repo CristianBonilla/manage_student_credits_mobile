@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:manage_student_credits_mobile/constants/api.dart' as api;
+import 'package:manage_student_credits_mobile/models/service_error.dart';
 import 'package:manage_student_credits_mobile/models/student/student_request.dart';
 import 'package:manage_student_credits_mobile/models/student/student_response.dart';
 import 'package:manage_student_credits_mobile/models/student/student_result.dart';
@@ -44,10 +45,14 @@ class StudentService extends ChangeNotifier {
             body: studentRequest.toJson(),
           ),
     );
-    final dynamic studentDecode = json.decode(response.body);
-    StudentResponse student = StudentResponse.fromMap(studentDecode);
+    final dynamic responseDecode = json.decode(response.body);
+    if (response.statusCode == 201) {
+      StudentResponse student = StudentResponse.fromMap(responseDecode);
 
-    return student;
+      return student;
+    } else {
+      throw ServiceErrorException(ServiceError.fromMap(responseDecode));
+    }
   }
 
   Future _load<T>(Future<T> Function() asyncFunc) async {

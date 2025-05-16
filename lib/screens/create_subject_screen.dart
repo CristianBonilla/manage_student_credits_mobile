@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:manage_student_credits_mobile/models/service_error.dart';
 import 'package:manage_student_credits_mobile/providers/subject_form_provider.dart';
 import 'package:manage_student_credits_mobile/services/subject_service.dart';
 import 'package:manage_student_credits_mobile/ui/input_decorations.dart';
@@ -115,11 +116,11 @@ class _SubjectForm extends StatelessWidget {
             );
             Navigator.pushReplacementNamed(context, 'subjects');
           }
-        } catch (error) {
+        } on ServiceErrorException catch (exception) {
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Ocurrió un error. No se agregó la asignatura'),
+              SnackBar(
+                content: Text(exception.error.errors[0]),
                 backgroundColor: Colors.red,
               ),
             );

@@ -22,7 +22,9 @@ class TeacherCard extends StatelessWidget {
             child: _container(),
           ),
         ),
-        TeacherDetailCard(teacherDetails: teacher.teacherDetails),
+        teacher.teacherDetails.isNotEmpty
+            ? TeacherDetailCard(teacherDetails: teacher.teacherDetails)
+            : SizedBox(),
       ],
     );
   }
