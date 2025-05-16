@@ -1,3 +1,4 @@
+export 'package:manage_student_credits_mobile/screens/create_student_screen.dart';
 export 'package:manage_student_credits_mobile/screens/create_subject_screen.dart';
 export 'package:manage_student_credits_mobile/screens/create_teacher_screen.dart';
 export 'package:manage_student_credits_mobile/screens/home_screen.dart';
