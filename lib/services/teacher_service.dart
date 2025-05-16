@@ -10,10 +10,7 @@ import 'package:http/http.dart' as http;
 class TeacherService extends ChangeNotifier {
   Future<List<TeacherResult>> getTeachers() async {
     final Uri url = Uri.http(api.ApiUrl.baseUrl, api.ApiUrl.teacherUrl);
-    late http.Response response;
-    await _load(
-      () async => response = await http.get(url, headers: api.headers),
-    );
+    final http.Response response = await http.get(url, headers: api.headers);
     final List<dynamic> teachersDecode = json.decode(response.body);
     List<TeacherResult> teachers =
         teachersDecode
@@ -37,14 +34,10 @@ class TeacherService extends ChangeNotifier {
 
   Future<TeacherResponse> addTeacher(TeacherRequest teacherRequest) async {
     final Uri url = Uri.http(api.ApiUrl.baseUrl, api.ApiUrl.teacherUrl);
-    late http.Response response;
-    await _load(
-      () async =>
-          response = await http.post(
-            url,
-            headers: api.headers,
-            body: teacherRequest.toJson(),
-          ),
+    final http.Response response = await http.post(
+      url,
+      headers: api.headers,
+      body: teacherRequest.toJson(),
     );
     final dynamic responseDecode = json.decode(response.body);
     if (response.statusCode == 201) {
@@ -54,9 +47,5 @@ class TeacherService extends ChangeNotifier {
     } else {
       throw ServiceErrorException(ServiceError.fromMap(responseDecode));
     }
-  }
-
-  Future _load<T>(Future<T> Function() asyncFunc) async {
-    await Future.wait([asyncFunc(), Future.delayed(Duration(seconds: 3))]);
   }
 }

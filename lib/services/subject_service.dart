@@ -10,10 +10,7 @@ import 'package:manage_student_credits_mobile/models/teacher/teacher_response.da
 class SubjectService extends ChangeNotifier {
   Future<List<SubjectResponse>> getSubjects() async {
     final Uri url = Uri.http(api.ApiUrl.baseUrl, api.ApiUrl.subjectUrl);
-    late http.Response response;
-    await _load(
-      () async => response = await http.get(url, headers: api.headers),
-    );
+    final http.Response response = await http.get(url, headers: api.headers);
     final List<dynamic> subjectsDecode = json.decode(response.body);
     List<SubjectResponse> subjects =
         subjectsDecode
@@ -25,14 +22,10 @@ class SubjectService extends ChangeNotifier {
 
   Future<SubjectResponse> addSubject(SubjectRequest subjectRequest) async {
     final Uri url = Uri.http(api.ApiUrl.baseUrl, api.ApiUrl.subjectUrl);
-    late http.Response response;
-    await _load(
-      () async =>
-          response = await http.post(
-            url,
-            headers: api.headers,
-            body: subjectRequest.toJson(),
-          ),
+    final http.Response response = await http.post(
+      url,
+      headers: api.headers,
+      body: subjectRequest.toJson(),
     );
     final dynamic responseDecode = json.decode(response.body);
     if (response.statusCode == 201) {
@@ -59,9 +52,5 @@ class SubjectService extends ChangeNotifier {
             .toList();
 
     return teachers;
-  }
-
-  Future _load<T>(Future<T> Function() asyncFunc) async {
-    await Future.wait([asyncFunc(), Future.delayed(Duration(seconds: 3))]);
   }
 }

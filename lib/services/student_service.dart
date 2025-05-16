@@ -11,10 +11,7 @@ import 'package:http/http.dart' as http;
 class StudentService extends ChangeNotifier {
   Future<List<StudentResult>> getStudents() async {
     final Uri url = Uri.http(api.ApiUrl.baseUrl, api.ApiUrl.studentUrl);
-    late http.Response response;
-    await _load(
-      () async => response = await http.get(url, headers: api.headers),
-    );
+    final http.Response response = await http.get(url, headers: api.headers);
     final List<dynamic> studentsDecode = json.decode(response.body);
     List<StudentResult> students =
         studentsDecode
@@ -48,14 +45,10 @@ class StudentService extends ChangeNotifier {
 
   Future<StudentResponse> addStudent(StudentRequest studentRequest) async {
     final Uri url = Uri.http(api.ApiUrl.baseUrl, api.ApiUrl.studentUrl);
-    late http.Response response;
-    await _load(
-      () async =>
-          response = await http.post(
-            url,
-            headers: api.headers,
-            body: studentRequest.toJson(),
-          ),
+    final http.Response response = await http.post(
+      url,
+      headers: api.headers,
+      body: studentRequest.toJson(),
     );
     final dynamic responseDecode = json.decode(response.body);
     if (response.statusCode == 201) {
@@ -77,10 +70,7 @@ class StudentService extends ChangeNotifier {
       '${api.ApiUrl.studentUrl}/$studentId',
       {'teacherId': teacherId, 'subjectId': subjectId},
     );
-    late http.Response response;
-    await _load(
-      () async => response = await http.post(url, headers: api.headers),
-    );
+    final http.Response response = await http.post(url, headers: api.headers);
     final dynamic responseDecode = json.decode(response.body);
     if (response.statusCode == 201) {
       StudentDetailResponse studentDetail = StudentDetailResponse.fromMap(
@@ -91,9 +81,5 @@ class StudentService extends ChangeNotifier {
     } else {
       throw ServiceErrorException(ServiceError.fromMap(responseDecode));
     }
-  }
-
-  Future _load<T>(Future<T> Function() asyncFunc) async {
-    await Future.wait([asyncFunc(), Future.delayed(Duration(seconds: 3))]);
   }
 }
