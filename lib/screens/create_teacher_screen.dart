@@ -124,6 +124,7 @@ class _TeacherForm extends StatelessWidget {
                 backgroundColor: Colors.green,
               ),
             );
+            Navigator.pop(context);
             Navigator.pushReplacementNamed(context, 'teachers');
           }
         } on ServiceErrorException catch (exception) {

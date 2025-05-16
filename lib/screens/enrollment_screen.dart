@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:manage_student_credits_mobile/models/service_error.dart';
 import 'package:manage_student_credits_mobile/models/student/student_response.dart';
 import 'package:manage_student_credits_mobile/models/subject/subject_response.dart';
 import 'package:manage_student_credits_mobile/models/teacher/teacher_result.dart';
+import 'package:manage_student_credits_mobile/services/student_service.dart';
 import 'package:manage_student_credits_mobile/services/subject_service.dart';
 import 'package:manage_student_credits_mobile/services/teacher_service.dart';
 import 'package:manage_student_credits_mobile/ui/field_decorations.dart';
@@ -14,25 +16,27 @@ class EnrollmentScreen extends StatefulWidget {
   const EnrollmentScreen({super.key, required this.student});
 
   @override
-  EnrollmentScreenState createState() => EnrollmentScreenState();
+  State<EnrollmentScreen> createState() => _EnrollmentScreenState();
 }
 
-class EnrollmentScreenState extends State<EnrollmentScreen> {
-  final _formKey = GlobalKey<FormState>();
+class _EnrollmentScreenState extends State<EnrollmentScreen> {
   String? _subjectIdSelected;
   String? _teacherIdSelected;
+  bool _canActiveButton = false;
 
   @override
   Widget build(BuildContext context) {
     final subjectService = Provider.of<SubjectService>(context);
     final teacherService = Provider.of<TeacherService>(context);
+    final studentService = Provider.of<StudentService>(context);
 
     return ScreenContainer(
       title: 'Enrolamiento',
       hasFloatingButton: false,
       child: FormCard(
-        formKey: _formKey,
         buttonText: 'Enrolar',
+        buttonOnPressed:
+            !_canActiveButton ? null : _enrollment(context, studentService),
         children: [
           SizedBox(
             width: double.infinity,
@@ -162,6 +166,7 @@ class EnrollmentScreenState extends State<EnrollmentScreen> {
       setState(() {
         _subjectIdSelected = subjects[0].subjectId;
       });
+      _enableButton();
     }
 
     return subjects;
@@ -175,8 +180,54 @@ class EnrollmentScreenState extends State<EnrollmentScreen> {
       setState(() {
         _teacherIdSelected = teachers[0].teacher.teacherId;
       });
+      _enableButton();
     }
 
     return teachers;
+  }
+
+  _enableButton() {
+    setState(() {
+      _canActiveButton =
+          _subjectIdSelected != null && _teacherIdSelected != null;
+    });
+  }
+
+  _enrollment(BuildContext context, StudentService studentService) {
+    return () async {
+      setState(() {
+        _canActiveButton = false;
+      });
+      try {
+        await studentService.assignSubject(
+          widget.student.studentId,
+          _teacherIdSelected!,
+          _subjectIdSelected!,
+        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Se agregó un nuevo enrolamiento'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, 'students');
+        }
+      } on ServiceErrorException catch (exception) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(exception.error.errors[0]),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      } finally {
+        setState(() {
+          _canActiveButton = true;
+        });
+      }
+    };
   }
 }

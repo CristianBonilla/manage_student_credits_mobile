@@ -85,6 +85,7 @@ class _SubjectForm extends StatelessWidget {
                 backgroundColor: Colors.green,
               ),
             );
+            Navigator.pop(context);
             Navigator.pushReplacementNamed(context, 'subjects');
           }
         } on ServiceErrorException catch (exception) {
