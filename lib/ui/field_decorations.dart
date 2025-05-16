@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class InputDecorations {
+class FieldDecorations {
   static InputDecoration inputFormDecoration({
     String? hinText,
     String? labelText,

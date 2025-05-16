@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:manage_student_credits_mobile/models/service_error.dart';
 import 'package:manage_student_credits_mobile/providers/teacher_form_provider.dart';
 import 'package:manage_student_credits_mobile/services/teacher_service.dart';
-import 'package:manage_student_credits_mobile/ui/input_decorations.dart';
+import 'package:manage_student_credits_mobile/ui/field_decorations.dart';
 import 'package:manage_student_credits_mobile/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +41,7 @@ class _TeacherForm extends StatelessWidget {
         TextFormField(
           autocorrect: false,
           keyboardType: TextInputType.number,
-          decoration: InputDecorations.inputFormDecoration(
+          decoration: FieldDecorations.inputFormDecoration(
             hinText: 'Número de documento',
             labelText: 'Número de documento',
             icon: Icons.badge,
@@ -76,7 +76,7 @@ class _TeacherForm extends StatelessWidget {
         TextFormField(
           autocorrect: false,
           keyboardType: TextInputType.name,
-          decoration: InputDecorations.inputFormDecoration(
+          decoration: FieldDecorations.inputFormDecoration(
             hinText: 'Nombres',
             labelText: 'Nombres',
             icon: Icons.account_box,
@@ -109,7 +109,7 @@ class _TeacherForm extends StatelessWidget {
         TextFormField(
           autocorrect: false,
           keyboardType: TextInputType.name,
-          decoration: InputDecorations.inputFormDecoration(
+          decoration: FieldDecorations.inputFormDecoration(
             hinText: 'Apellidos',
             labelText: 'Apellidos',
             icon: Icons.account_box,
@@ -142,7 +142,7 @@ class _TeacherForm extends StatelessWidget {
         TextFormField(
           autocorrect: false,
           keyboardType: TextInputType.emailAddress,
-          decoration: InputDecorations.inputFormDecoration(
+          decoration: FieldDecorations.inputFormDecoration(
             hinText: 'cristian.bonilla@gmail.com',
             labelText: 'Email',
             icon: Icons.email,
@@ -172,7 +172,7 @@ class _TeacherForm extends StatelessWidget {
         TextFormField(
           autocorrect: false,
           keyboardType: TextInputType.text,
-          decoration: InputDecorations.inputFormDecoration(
+          decoration: FieldDecorations.inputFormDecoration(
             hinText: 'Software Enginner',
             labelText: 'Profesión',
             icon: Icons.check_circle,

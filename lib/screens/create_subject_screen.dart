@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:manage_student_credits_mobile/models/service_error.dart';
 import 'package:manage_student_credits_mobile/providers/subject_form_provider.dart';
 import 'package:manage_student_credits_mobile/services/subject_service.dart';
-import 'package:manage_student_credits_mobile/ui/input_decorations.dart';
+import 'package:manage_student_credits_mobile/ui/field_decorations.dart';
 import 'package:manage_student_credits_mobile/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -41,7 +41,7 @@ class _SubjectForm extends StatelessWidget {
         TextFormField(
           autocorrect: false,
           keyboardType: TextInputType.name,
-          decoration: InputDecorations.inputFormDecoration(
+          decoration: FieldDecorations.inputFormDecoration(
             hinText: 'Clean Architectures',
             labelText: 'Nombre de la asignatura',
             icon: Icons.subject,
@@ -75,7 +75,7 @@ class _SubjectForm extends StatelessWidget {
           maxLines: 3,
           autocorrect: false,
           keyboardType: TextInputType.multiline,
-          decoration: InputDecorations.inputFormDecoration(
+          decoration: FieldDecorations.inputFormDecoration(
             hinText: 'Detalles...',
             labelText: 'Descripción de la asignatura',
             icon: Icons.description,
